@@ -233,21 +233,53 @@ with app.app_context():
 
 ## Troubleshooting
 
-### Lỗi Database Connection
+### ⚠️ Lỗi Database Connection: "could not translate host name"
+
+**Nguyên nhân**: DATABASE_URL không đúng hoặc thiếu domain đầy đủ
+
+**Giải pháp nhanh**:
+
+1. Vào Render PostgreSQL Dashboard
+2. Copy **Internal Database URL** (KHÔNG phải External!)
+3. Update Environment Variable `DATABASE_URL` trong Web Service
+4. Format đúng phải là:
+
+   ```
+   postgresql://user:pass@dpg-xxxxx-a.region-postgres.render.com:5432/dbname
+   ```
+
+5. **Test connection** trước:
+   ```bash
+   export DATABASE_URL="your-database-url"
+   python test_db.py
+   ```
+
+📖 **Chi tiết**: Xem file `TROUBLESHOOTING.md`
+
+### Lỗi Database Connection (khác)
 
 Kiểm tra:
 
 - `DATABASE_URL` có đúng format không
-- Database có đang chạy không (trên Render Dashboard)
+- Database có status "Available" không (trên Render Dashboard)
+- Web Service và Database cùng region không
 
 ### Lỗi 502 Bad Gateway
 
 - Đợi vài phút để Render build xong
 - Kiểm tra logs trong tab "Logs"
+- Verify DATABASE_URL đã được set đúng
 
 ### Lỗi Permission Denied
 
 - Đảm bảo role của user đúng (admin/teacher/student)
+
+### Application không start được
+
+1. Check logs: Tab "Logs" trong Render
+2. Verify environment variables đã set đầy đủ
+3. Test database connection với `test_db.py`
+4. Thử "Clear build cache & deploy"
 
 ## Bảo mật
 
