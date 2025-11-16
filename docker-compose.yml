@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://studentuser:2QxZnAmuk7Y4Rd8XK2PVz1BZXSN0rnsR@dpg-d4d1k18gjchc73dnarrg-a/studentdb_lamm
+      - DATABASE_URL=postgresql://studentuser:J49vxYEHzq1dGNhRiHk9r5LVFwPKCTSp@dpg-d4d2buodl3ps73bqfj60-a/studentdb_9r9r
       - SECRET_KEY=trannhatduc2004
     depends_on:
       - db
