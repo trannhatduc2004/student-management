@@ -440,34 +440,57 @@ def init_db():
 
 # Tự động khởi tạo DB khi app khởi động (cho Render)
 def ensure_db_initialized():
-    """Đảm bảo database đã được khởi tạo"""
+    """Đảm bảo database đã được khởi tạo với dữ liệu mẫu"""
     try:
         with app.app_context():
-            # Tạo tất cả các bảng nếu chưa có
+            # Tạo tất cả các bảng
             db.create_all()
             
-            # Tạo admin user nếu chưa có
-            admin = User.query.filter_by(username='admin').first()
-            if not admin:
-                admin = User(
-                    username='admin',
-                    role='admin',
-                    full_name='Administrator',
-                    email='admin@example.com'
-                )
-                admin.set_password('admin123')
-                db.session.add(admin)
-                db.session.commit()
-                print("✓ Admin user created: username='admin', password='admin123'")
-            else:
-                print("✓ Admin user already exists")
+            # Danh sách user mặc định
+            default_users = [
+                {
+                    'username': 'admin',
+                    'password': 'admin123',
+                    'role': 'admin',
+                    'full_name': 'Quản trị viên',
+                    'email': 'admin@example.com'
+                },
+                {
+                    'username': 'teacher',
+                    'password': 'teacher123',
+                    'role': 'teacher',
+                    'full_name': 'Nguyễn Văn Giáo',
+                    'email': 'teacher@example.com'
+                },
+                {
+                    'username': 'student',
+                    'password': 'student123',
+                    'role': 'student',
+                    'full_name': 'Trần Thị Sinh Viên',
+                    'email': 'student@example.com'
+                }
+            ]
+            
+            # Tạo user nếu chưa có
+            for user_data in default_users:
+                existing_user = User.query.filter_by(username=user_data['username']).first()
+                if not existing_user:
+                    new_user = User(
+                        username=user_data['username'],
+                        role=user_data['role'],
+                        full_name=user_data['full_name'],
+                        email=user_data['email']
+                    )
+                    new_user.set_password(user_data['password'])
+                    db.session.add(new_user)
+                    print(f"✓ {user_data['role'].upper()} user created: username='{user_data['username']}', password='{user_data['password']}'")
+            
+            db.session.commit()
+            print("✓ Database initialization completed!")
                 
     except Exception as e:
-        # Log lỗi nhưng không crash app
-        print(f"⚠️ DB initialization: {e}")
-
-# Gọi hàm khởi tạo DB
-ensure_db_initialized()
+        print(f"⚠️ DB initialization error: {e}")
+        db.session.rollback()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
