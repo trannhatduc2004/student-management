@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Sinh viên{% endblock %}
+{% block page_title %}Thông tin học tập{% endblock %}
+
+{% block content %}
+{% if student %}
+<div class="row mb-4">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-person-circle" style="font-size: 5rem; color: #4e73df;"></i>
+                </div>
+                <h5 class="card-title">{{ student.full_name }}</h5>
+                <p class="text-muted mb-1">{{ student.student_id }}</p>
+                <p class="text-muted mb-1">{{ student.class_name or 'N/A' }}</p>
+                <p class="text-muted">{{ student.major or 'N/A' }}</p>
+                <hr>
+                <div class="d-flex justify-content-around">
+                    <div>
+                        <div class="h4 mb-0 font-weight-bold text-primary">{{ gpa }}</div>
+                        <div class="small text-muted">GPA</div>
+                    </div>
+                    <div>
+                        <div class="h4 mb-0 font-weight-bold text-success">{{ scores|length }}</div>
+                        <div class="small text-muted">Môn học</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Bảng điểm</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Môn học</th>
+                                <th>Tín chỉ</th>
+                                <th>Điểm GK</th>
+                                <th>Điểm CK</th>
+                                <th>Điểm TB</th>
+                                <th>Điểm chữ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for score in scores %}
+                            <tr>
+                                <td>{{ score.subject.subject_name }}</td>
+                                <td>{{ score.subject.credits }}</td>
+                                <td>{{ score.midterm_score }}</td>
+                                <td>{{ score.final_score }}</td>
+                                <td><strong>{{ score.average_score }}</strong></td>
+                                <td>
+                                    {% if score.letter_grade in ['A+', 'A'] %}
+                                    <span class="badge bg-success">{{ score.letter_grade }}</span>
+                                    {% elif score.letter_grade in ['B+', 'B'] %}
+                                    <span class="badge bg-info">{{ score.letter_grade }}</span>
+                                    {% elif score.letter_grade in ['C+', 'C'] %}
+                                    <span class="badge bg-warning">{{ score.letter_grade }}</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">{{ score.letter_grade }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Chưa có điểm</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle"></i> Không tìm thấy thông tin sinh viên
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hệ thống quản lý sinh viên{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary-color) 10%, #224abe 100%);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,.8);
+            padding: 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background: rgba(255,255,255,.1);
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background: rgba(255,255,255,.2);
+        }
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58,59,69,.15);
+            border: none;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar text-white" style="width: 250px;">
+            <div class="p-4">
+                <h4><i class="bi bi-mortarboard-fill"></i> QLSV</h4>
+                <p class="small mb-0">{{ current_user.full_name }}</p>
+                <p class="small text-white-50">{{ current_user.role|upper }}</p>
+            </div>
+            <nav class="nav flex-column">
+                {% if current_user.role == 'admin' %}
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('list_students') }}">
+                    <i class="bi bi-people"></i> Sinh viên
+                </a>
+                <a class="nav-link" href="{{ url_for('list_subjects') }}">
+                    <i class="bi bi-book"></i> Môn học
+                </a>
+                <a class="nav-link" href="{{ url_for('list_scores') }}">
+                    <i class="bi bi-clipboard-data"></i> Điểm số
+                </a>
+                <a class="nav-link" href="{{ url_for('import_students') }}">
+                    <i class="bi bi-upload"></i> Import Excel
+                </a>
+                <a class="nav-link" href="{{ url_for('export_students') }}">
+                    <i class="bi bi-download"></i> Export Excel
+                </a>
+                {% elif current_user.role == 'teacher' %}
+                <a class="nav-link" href="{{ url_for('teacher_dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('list_students') }}">
+                    <i class="bi bi-people"></i> Sinh viên
+                </a>
+                <a class="nav-link" href="{{ url_for('list_subjects') }}">
+                    <i class="bi bi-book"></i> Môn học
+                </a>
+                <a class="nav-link" href="{{ url_for('list_scores') }}">
+                    <i class="bi bi-clipboard-data"></i> Điểm số
+                </a>
+                <a class="nav-link" href="{{ url_for('export_students') }}">
+                    <i class="bi bi-download"></i> Export Excel
+                </a>
+                {% else %}
+                <a class="nav-link" href="{{ url_for('student_dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                {% endif %}
+                <hr class="my-2 bg-light">
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+                <div class="container-fluid">
+                    <span class="navbar-brand mb-0 h1">{% block page_title %}Hệ thống quản lý sinh viên{% endblock %}</span>
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% block login_content %}{% endblock %}
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

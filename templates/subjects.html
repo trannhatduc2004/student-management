@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Danh sách môn học{% endblock %}
+{% block page_title %}Quản lý môn học{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách môn học</h6>
+        <a href="{{ url_for('add_subject') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Thêm môn học
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã môn</th>
+                        <th>Tên môn học</th>
+                        <th>Số tín chỉ</th>
+                        <th>Học kỳ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td><strong>{{ subject.subject_code }}</strong></td>
+                        <td>{{ subject.subject_name }}</td>
+                        <td>{{ subject.credits }}</td>
+                        <td>{{ subject.semester or 'N/A' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Chưa có môn học nào</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

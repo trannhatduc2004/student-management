@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý điểm{% endblock %}
+{% block page_title %}Quản lý điểm số{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Bảng điểm</h6>
+        <a href="{{ url_for('add_score') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Nhập điểm
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã SV</th>
+                        <th>Sinh viên</th>
+                        <th>Môn học</th>
+                        <th>Điểm GK</th>
+                        <th>Điểm CK</th>
+                        <th>Điểm TB</th>
+                        <th>Điểm chữ</th>
+                        <th>Học kỳ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in scores %}
+                    <tr>
+                        <td>{{ score.student.student_id }}</td>
+                        <td>{{ score.student.full_name }}</td>
+                        <td>{{ score.subject.subject_name }}</td>
+                        <td>{{ score.midterm_score }}</td>
+                        <td>{{ score.final_score }}</td>
+                        <td><strong>{{ score.average_score }}</strong></td>
+                        <td>
+                            {% if score.letter_grade in ['A+', 'A'] %}
+                            <span class="badge bg-success">{{ score.letter_grade }}</span>
+                            {% elif score.letter_grade in ['B+', 'B'] %}
+                            <span class="badge bg-info">{{ score.letter_grade }}</span>
+                            {% elif score.letter_grade in ['C+', 'C'] %}
+                            <span class="badge bg-warning">{{ score.letter_grade }}</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ score.letter_grade }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ score.semester or 'N/A' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">Chưa có dữ liệu điểm</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

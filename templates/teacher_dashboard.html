@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Giáo viên{% endblock %}
+{% block page_title %}Dashboard - Giáo viên{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2" style="border-left: 4px solid #4e73df;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tổng sinh viên</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_students }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2" style="border-left: 4px solid #36b9cc;">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tổng môn học</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_subjects }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-book fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Điểm mới nhất</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Sinh viên</th>
+                        <th>Môn học</th>
+                        <th>Điểm TB</th>
+                        <th>Điểm chữ</th>
+                        <th>Ngày nhập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for score in recent_scores %}
+                    <tr>
+                        <td>{{ score.student.full_name }}</td>
+                        <td>{{ score.subject.subject_name }}</td>
+                        <td><strong>{{ score.average_score }}</strong></td>
+                        <td>
+                            {% if score.letter_grade in ['A+', 'A'] %}
+                            <span class="badge bg-success">{{ score.letter_grade }}</span>
+                            {% elif score.letter_grade in ['B+', 'B'] %}
+                            <span class="badge bg-info">{{ score.letter_grade }}</span>
+                            {% elif score.letter_grade in ['C+', 'C'] %}
+                            <span class="badge bg-warning">{{ score.letter_grade }}</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ score.letter_grade }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ score.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Chưa có dữ liệu</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

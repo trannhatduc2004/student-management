@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Import sinh viên{% endblock %}
+{% block page_title %}Import danh sách sinh viên từ Excel{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Import từ file Excel</h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h6 class="alert-heading"><i class="bi bi-info-circle"></i> Hướng dẫn</h6>
+                    <p class="mb-2">File Excel cần có các cột sau:</p>
+                    <ul class="mb-0">
+                        <li><strong>student_id</strong> (bắt buộc) - Mã sinh viên</li>
+                        <li><strong>full_name</strong> (bắt buộc) - Họ và tên</li>
+                        <li><strong>email</strong> (tùy chọn) - Email</li>
+                        <li><strong>phone</strong> (tùy chọn) - Số điện thoại</li>
+                        <li><strong>class_name</strong> (tùy chọn) - Lớp</li>
+                        <li><strong>major</strong> (tùy chọn) - Chuyên ngành</li>
+                    </ul>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label class="form-label">Chọn file Excel (.xlsx hoặc .xls)</label>
+                        <input type="file" class="form-control" name="file" accept=".xlsx,.xls" required>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('list_students') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Import
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h6 class="card-title"><i class="bi bi-file-earmark-excel"></i> File mẫu</h6>
+                        <p class="card-text small text-muted">Bạn có thể tạo file Excel với cấu trúc như bảng dưới:</p>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>student_id</th>
+                                        <th>full_name</th>
+                                        <th>email</th>
+                                        <th>phone</th>
+                                        <th>class_name</th>
+                                        <th>major</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>SV001</td>
+                                        <td>Nguyễn Văn A</td>
+                                        <td>nva@example.com</td>
+                                        <td>0901234567</td>
+                                        <td>CNTT-K17</td>
+                                        <td>Công nghệ thông tin</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SV002</td>
+                                        <td>Trần Thị B</td>
+                                        <td>ttb@example.com</td>
+                                        <td>0907654321</td>
+                                        <td>CNTT-K17</td>
+                                        <td>Khoa học máy tính</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

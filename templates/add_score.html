@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Nhập điểm{% endblock %}
+{% block page_title %}Nhập điểm cho sinh viên{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Thông tin điểm</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Sinh viên <span class="text-danger">*</span></label>
+                        <select class="form-select" name="student_id" required>
+                            <option value="">-- Chọn sinh viên --</option>
+                            {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.student_id }} - {{ student.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Môn học <span class="text-danger">*</span></label>
+                        <select class="form-select" name="subject_id" required>
+                            <option value="">-- Chọn môn học --</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.subject_code }} - {{ subject.subject_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Điểm giữa kỳ <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="midterm_score" step="0.1" min="0" max="10" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Điểm cuối kỳ <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="final_score" step="0.1" min="0" max="10" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Học kỳ</label>
+                        <input type="text" class="form-control" name="semester" placeholder="VD: HK1-2024">
+                    </div>
+
+                    <div class="alert alert-info">
+                        <small><i class="bi bi-info-circle"></i> Điểm trung bình = Điểm GK × 40% + Điểm CK × 60%</small>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('list_scores') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Quay lại
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Lưu điểm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
