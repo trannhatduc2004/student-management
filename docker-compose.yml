@@ -6,20 +6,21 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://studentuser:8FsUcHcGpkIgJmhhud7Ti5Zusy58xBh6@dpg-d4d2isodl3ps73bqj0u0-a/studentdb_6y1w
-      - SECRET_KEY=abc123xyz789qwertyuiop4567890def
+      # Credentials LOCAL - tự đặt thoải mái
+      - DATABASE_URL=postgresql://studentuser:localpass123@db:5432/studentdb
+      - SECRET_KEY=local-dev-secret-key-12345
     depends_on:
       - db
     volumes:
       - .:/app
-    command: gunicorn --bind 0.0.0.0:5000 --workers 2 --reload app:app
 
   db:
     image: postgres:15-alpine
     environment:
+      # Credentials LOCAL - tự đặt thoải mái
       - POSTGRES_DB=studentdb
       - POSTGRES_USER=studentuser
-      - POSTGRES_PASSWORD=studentpass
+      - POSTGRES_PASSWORD=localpass123
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
